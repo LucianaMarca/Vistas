@@ -1,0 +1,39 @@
+1) CREATE VIEW clientes_oriundo AS
+SELECT c.nombre, c.apellido, ci.nombre AS ciudad
+FROM clientes c
+JOIN ciudades ci ON c.localidad = ci.id;
+
+2) SELECT * FROM clientes_oriundo WHERE ciudad = "santa fe";
+
+3) CREATE VIEW ciudades_provincias AS
+SELECT ci.nombre AS ciudad, p.nombre AS provincia
+FROM ciudades ci
+JOIN provincias p ON ci.provincia = p.id;
+
+4) CREATE VIEW provincias_ciudades AS
+SELECT p.nombre, COUNT(ci.id) AS cantidad_ciudades
+FROM provincias p
+JOIN ciudades ci ON ci.provincia = p.id
+GROUP BY p.id
+HAVING COUNT(ci.id) > 1;
+
+5) CREATE VIEW productos_sin_stock AS SELECT * FROM productos WHERE stock = 0;
+6) SELECT MAX(precio) AS mas_caro, MIN(precio) AS mas_barato FROM productos_sin_stock;
+
+7) CREATE VIEW clientes_compra AS
+SELECT DISTINCT c.id, c.nombre, c.apellido FROM clientes c
+JOIN compras co ON c.id = co.cliente;
+
+8) CREATE OR REPLACE VIEW clientes_compra AS
+SELECT c.id, c.nombre, c.apellido, SUM(co.cant) AS total_productos FROM clientes c
+JOIN compras co ON c.id = co.cliente GROUP BY c.id;
+
+9)CREATE OR REPLACE VIEW clientes_compra AS
+SELECT c.id, c.nombre, c.apellido, SUM(co.cant) AS total_productos, SUM(co.cant * p.precio) AS total_gastado FROM clientes c
+JOIN compras co ON c.id = co.cliente
+JOIN productos p ON co.producto = p.id GROUP BY c.id;
+
+10) CREATE VIEW productos_no_comprados AS
+SELECT *
+FROM productos
+WHERE id NOT IN (SELECT producto FROM compras);
