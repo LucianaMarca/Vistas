@@ -1,0 +1,29 @@
+1) CREATE VIEW nombre_cliente AS SELECT nombre, apellido FROM clientes;
+2) INSERT INTO nombre_cliente VALUES ("Lautaro", "Laguzzi");
+3) DROP VIEW nombre_cliente;
+4) CREATE VIEW productos_bic AS SELECT * FROM productos WHERE marca = 'BIC';
+
+5) CREATE VIEW porteños AS SELECT c.*
+FROM clientes c
+JOIN ciudades ci ON c.localidad = ci.id
+JOIN provincias p ON ci.provincia = p.id
+WHERE p.nombre = 'Buenos Aires' OR p.nombre = 'Ciudad Autonoma de Buenos Aires';
+
+6) DELETE FROM porteños WHERE localidad NOT IN (SELECT id FROM ciudades WHERE provincia = 24);
+7) CREATE VIEW productos_mayor ASSELECT * FROM productos WHERE precio > 100;
+
+8) CREATE VIEW clientes_ciudad AS
+SELECT c.nombre, c.apellido, ci.nombre
+FROM clientes c
+JOIN ciudades ci ON c.localidad = ci.id;
+
+9) CREATE VIEW ciudades_provincias AS
+SELECT ci.nombre, p.nombre
+FROM ciudades ci
+JOIN provincias p ON ci.provincia = p.id;
+
+10) CREATE VIEW ultima_compra_cliente AS
+SELECT c.nombre, c.apellido, MAX(co.fecha)
+FROM clientes c
+JOIN compras co ON c.id = co.cliente
+GROUP BY c.id;
